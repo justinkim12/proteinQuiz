@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+
+  <title>칼로리 퀴즈</title>
+  <style>
+        * {padding: 0; margin: 0;}
+        #wrap {width: 90%; margin: 0 auto; }
+        nav {width: 100%; height: 12vh; background-color: blueviolet; margin-bottom: 2vh;}
+
+        #quiz {width: 70%; height: 70vh;background-color: darkgray; float:left;text-align: center;}
+        #quiz img {width : auto; height: 40vh;  display: block;
+                    margin-left: auto; margin-right: auto; margin-bottom: 2vh; }
+        input, button  {width: auto;height: 30px; }
+
+        #hint {width: 30%; height: 70vh;background-color: aqua;float:left;}
+
+        /* 반응형으로 만들기 위해 화면 width값에 따라 조절 */
+        /* 웹사이트용 */
+        @media (max-width:960px){
+            #wrap {width: 90%; }
+        }
+        /* 타블렛용 */
+        @media (max-width:768px){
+            #wrap {width: 100%; }
+        }
+        @media (max-width:480px){
+            #quiz{float: none ;width:100%}
+            #hint{float: none ;width:100%}
+        }
+
+    </style>
+</head>
+<body>
+<nav>네비게이션
+  <div id="turn">
+    <span id="current" th:text="${turn}">1</span>
+    <span id="total">/10</span>
+  </div>
+</nav>
+<div id="wrap">
+  <div id="quiz" th:object="${food}">
+    <img th:src="${food.file_path}" alt="새우깡">
+    <div id="description" th:text="${food.name}">새우깡 400g</div>
+    <form name="form" th:action type="post">
+      <label>정답 :</label>
+      <input type="number" name="submit" id="submit" min=0>
+      <button>Go</button>
+    </form>
+  </div>
+  <div id="hint">힌트</div>
+</div>
+</body>
+</html>
