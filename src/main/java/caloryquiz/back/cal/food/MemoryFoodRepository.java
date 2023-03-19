@@ -22,7 +22,6 @@ public class MemoryFoodRepository implements foodRepository {
     public Optional<Food> randomFood() {
         Random rand = new Random();
         Long key =(long) (rand.nextInt(Math.toIntExact(id)));
-        System.out.println("key = " + key);
         return findFoodByKey(key);
     }
 

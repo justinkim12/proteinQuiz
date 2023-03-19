@@ -21,8 +21,6 @@ public class webController {
 
     private final MemoryPlayerRepository memoryPlayerRepository = new MemoryPlayerRepository();
     private final MemoryFoodRepository memoryFoodRepository = new MemoryFoodRepository();
-    private static Long turn =1L;
-    ArrayList<String> foodList = new ArrayList<>();;
 
 
     @GetMapping
@@ -35,8 +33,7 @@ public class webController {
     @PostMapping
     public String startQuiz(String email) {
         if (email != null) {
-            Player player = new Player();
-            player.setEmail(email);
+            Player player = new Player(email, 0, 1L, new ArrayList<Long>());
             memoryPlayerRepository.save(player);
             log.info("Save = {}", email);
             /**
@@ -44,14 +41,23 @@ public class webController {
              * 세션 관리
              */
         }
-        turn=1L;
+
         log.info("Start Quiz");
-        foodList = new ArrayList<>();
         return "redirect:/quiz";
     }
 
     @GetMapping("/quiz")
-    public String quiz(@RequestParam(required = false) Integer submit, Model model, RedirectAttributes redirectAttributes){
+    public String quiz(@RequestParam(required = false) Integer submit, @RequestParam(required = false) Long key,
+                       Model model, RedirectAttributes redirectAttributes){
+        log.info("Quiz page");
+
+        Player player = memoryPlayerRepository.findPlayerByKey(0L).get();
+        /**
+         * TODO
+         * 로그인 처리하고 바꿔야됨
+         */
+
+        Long turn = player.getTurn();
 
         if (turn >= 3L) { //3번턴까지만
             log.info("finish");
@@ -65,32 +71,56 @@ public class webController {
             return "redirect:/finish";
         }
 
-        Food food = memoryFoodRepository.randomFood().get();
-        /**
-         * TODO
-         * 중복되는 것 안 나오게 하기
-         * 새로 고침하고 풀지 않은건 나올 수 있음
-         */
-        model.addAttribute("food",food);
-        log.info("NextFood = {}", food.getName());
 
         if (submit == null) {
-            log.info("Quiz page");
+            log.info("Nothing");
         }
         else{
-            log.info("Answer is {}", submit);
-            turn+=1L;
-        }
+//                Long answerKey = Long.valueOf(key);
+                log.info("Answer is {} answerKey is {}", submit, key);
+                Food ansFood = memoryFoodRepository.findFoodByKey(key).get();
+                int result = ansFood.getCalorie() - submit;
+                /**
+                 * TODO
+                 * 점수 로직 짜기
+                 */
+                log.info("You got {} point", result);
+                player.setScore(player.getScore() + result);
 
-        log.info("Next turn = {}", turn);
+                ArrayList<Long> foodList = player.getFoodList();
+                foodList.add(key);
+                player.setFoodList(foodList);
+                log.info("foodList = {}", player.getFoodList());
+
+
+                player.setTurn(turn + 1L);
+
+
+        }
+        Food food = memoryFoodRepository.randomFood().get();
+
+        while (player.getFoodList().contains(food.getKey())) {
+            log.info("Skipped = {}", food.getName());
+            food = memoryFoodRepository.randomFood().get();
+        }
+        model.addAttribute("food",food);
+
+        /**
+         * TODO
+         * 새로 고침하고 풀지 않은건 나올 수 있음
+         */
+
+        log.info("Current Food = {}", food.getName());
+        log.info("Current turn = {}", turn);
+
+        model.addAttribute("player", player);
         model.addAttribute("turn", turn);
         return "/webpage/quiz";
     }
 
     @GetMapping("/finish")
     public String finish(){
-        foodList.clear();
-        turn = 1L;
+
         return "webpage/finish";
     }
 
@@ -104,6 +134,8 @@ public class webController {
         memoryFoodRepository.save(food1);
         memoryFoodRepository.save(food2);
         memoryFoodRepository.save(food3);
+
+        Player player = new Player("a@a.com", 0, 1L, new ArrayList<Long>());
     }
 
 }

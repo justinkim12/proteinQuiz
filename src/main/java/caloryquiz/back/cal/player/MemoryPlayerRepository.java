@@ -1,16 +1,16 @@
 package caloryquiz.back.cal.player;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemoryPlayerRepository implements playerRepository{
-    private static final Map<String, Player> store = new ConcurrentHashMap<>(); //static
+    private static final Map<Long, Player> store = new ConcurrentHashMap<>(); //static
+    private static Long key =0L;
 
     @Override
     public Player save(Player player) {
-        store.put(player.getEmail(), player);
+        player.setKey(key++);
+        store.put(player.getKey(), player);
         return player;
     }
 
@@ -20,5 +20,14 @@ public class MemoryPlayerRepository implements playerRepository{
         return player;
     }
 
+    @Override
+    public ArrayList<Player> findAll() {
+        return new ArrayList<>(store.values());
+    }
 
+
+    @Override
+    public Optional<Player> findPlayerByKey(Long key) {
+        return findAll().stream().filter(m -> m.getKey().equals(key)).findFirst();
+    }
 }

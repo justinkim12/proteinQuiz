@@ -40,18 +40,22 @@
 </head>
 <body>
 <nav>네비게이션
-  <div id="turn">
-    <span id="current" th:text="${turn}">1</span>
+  <div id="turn" th:object="${player}">
+    <span id="current" th:text="*{turn}">1</span>
     <span id="total">/10</span>
+
+    <span id="score" th:text="*{score}">0</span>
+
   </div>
 </nav>
 <div id="wrap">
   <div id="quiz" th:object="${food}">
-    <img th:src="${food.file_path}" alt="새우깡">
-    <div id="description" th:text="${food.name}">새우깡 400g</div>
+    <img th:src="*{file_path}" alt="새우깡">
+    <div id="description" th:text="*{name}">새우깡 400g</div>
     <form name="form" th:action type="post">
       <label>정답 :</label>
       <input type="number" name="submit" id="submit" min=0>
+      <input type="hidden" name="key" id="key" th:value="${food.key}">
       <button>Go</button>
     </form>
   </div>
