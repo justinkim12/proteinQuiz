@@ -1,9 +1,12 @@
 package caloryquiz.back.cal.player;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MemoryPlayerRepository implements playerRepository{
+@Repository
+public class MemoryPlayerRepository implements PlayerRepository {
     private static final Map<Long, Player> store = new ConcurrentHashMap<>(); //static
     private static Long key =0L;
 
@@ -29,5 +32,10 @@ public class MemoryPlayerRepository implements playerRepository{
     @Override
     public Optional<Player> findPlayerByKey(Long key) {
         return findAll().stream().filter(m -> m.getKey().equals(key)).findFirst();
+    }
+
+    @Override
+    public Player findByNickName(String nickName) {
+        return findAll().stream().filter(m -> m.getNickName().equals(nickName)).findFirst().get();
     }
 }

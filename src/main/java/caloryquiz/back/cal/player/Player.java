@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class Player {
     private Long key;
-    private String email;
+    private String nickName;
     private Integer score;
     private Long turn;
     private ArrayList<Long> foodList; //푼 문제들 넣어두기
@@ -20,8 +20,8 @@ public class Player {
      * 로그인 처리
      * turn 변수 여기에 넣기
      */
-    public Player(String email, Integer score, Long turn, ArrayList<Long> foodList) {
-        this.email = email;
+    public Player(String nickName, Integer score, Long turn, ArrayList<Long> foodList) {
+        this.nickName = nickName;
         this.score = score;
         this.turn = turn;
         this.foodList = foodList;
