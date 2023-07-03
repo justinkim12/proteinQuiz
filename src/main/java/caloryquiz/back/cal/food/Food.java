@@ -10,12 +10,12 @@ public class Food {
     private Long key;
     private String name; //제품 명
     private String file_path; //파일 경로
-    private Integer calorie; // 칼로리 (답)
+    private Integer protein; // 칼로리 (답)
 
-    public Food( String name,String file_path, Integer calorie) {
+    public Food( String name,String file_path, Integer protein) {
 
         this.name = name;
         this.file_path = file_path;
-        this.calorie = calorie;
+        this.protein = protein;
     }
 }
