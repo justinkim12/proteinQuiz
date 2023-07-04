@@ -16,6 +16,11 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    public Player save(Player player,PlayerOutcome outcome){
+        player.setScore(outcome.getScore());
+        return playerRepository.save(player);
+    }
+
     public Player done(Player player, Integer score) {
         return playerRepository.done(player, score);
     }

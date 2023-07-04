@@ -3,6 +3,7 @@ package caloryquiz.back.cal.web.Contoller;
 import caloryquiz.back.cal.food.Food;
 import caloryquiz.back.cal.food.FoodService;
 import caloryquiz.back.cal.player.Player;
+import caloryquiz.back.cal.player.PlayerOutcome;
 import caloryquiz.back.cal.player.PlayerService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://http:localhost:3000") //React와 연동을 위해 잠시 추가
+@CrossOrigin(origins = "*") //React와 연동을 위해 잠시 추가
 public class WebController {
     private final PlayerService playerService;
     private final FoodService foodService;
@@ -69,9 +70,14 @@ public class WebController {
 
 
     @PostMapping("/players/outcome")
-    public void QuizEnd(@ModelAttribute Player player) {
+    public void QuizEnd(@RequestBody PlayerOutcome outcome, HttpServletRequest request) {
+
+        log.info("score = {}", outcome.getScore());
+        HttpSession session = request.getSession(false);
+        String nickName = (String) session.getAttribute("nickName");
+        Player player = new Player(nickName, 0);
         log.info("save player = {}",player.getNickName());
-        playerService.save(player);
+        playerService.save(player,outcome);
     }
 
     @GetMapping("/dashboard/player")
@@ -85,8 +91,9 @@ public class WebController {
 
         /**
          *TODO 순위를 추가하기
+         * 세션 해제?
          */
-        data.put("nickName", nickName);
+        data.put("player", player);
 
         //dashboard 정보
         /**

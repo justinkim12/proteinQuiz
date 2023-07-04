@@ -20,11 +20,10 @@ public class Player {
      * 로그인 처리
      * turn 변수 여기에 넣기
      */
-    public Player(String nickName, Integer score, Long turn, ArrayList<Long> foodList) {
+    public Player(String nickName, Integer score) {
         this.nickName = nickName;
         this.score = score;
-        this.turn = turn;
-        this.foodList = foodList;
+
     }
 
 
