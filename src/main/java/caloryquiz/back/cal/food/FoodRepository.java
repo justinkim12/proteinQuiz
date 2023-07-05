@@ -3,7 +3,7 @@ package caloryquiz.back.cal.food;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public interface foodRepository {
+public interface FoodRepository {
 
     Food save(Food food);
 
@@ -11,4 +11,5 @@ public interface foodRepository {
 
     Optional<Food> randomFood();
     ArrayList<Food> findAll();
+
 }

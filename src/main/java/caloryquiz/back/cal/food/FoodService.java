@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class FoodService {
-    private final foodRepository foodRepository;
+    private final FoodRepository foodRepository;
+
+    public FoodQuiz MakeQuiz(Food food){
+        return new FoodQuiz(food.getName(), food.getFile_path(), food.getKey());
+    }
 
 
     public Food save(Food food) {
@@ -22,7 +25,7 @@ public class FoodService {
     }
 
     public Optional<Food> randomFood() {
-        return randomFood();
+        return foodRepository.randomFood();
     }
 
     public Optional<Food> findFoodByKey(Long key) {

@@ -1,6 +1,7 @@
 package caloryquiz.back.cal.web.Contoller;
 
 import caloryquiz.back.cal.food.Food;
+import caloryquiz.back.cal.food.FoodQuiz;
 import caloryquiz.back.cal.food.FoodService;
 import caloryquiz.back.cal.player.Player;
 import caloryquiz.back.cal.player.PlayerOutcome;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +42,8 @@ public class WebController {
          * TODO nickName primary 검사
          */
         session.setAttribute("nickName", nickName);
+        Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
+        session.setAttribute("player",player);
         log.info("nickName = {}",session.getAttribute("nickName"));
 
     }
@@ -61,23 +63,45 @@ public class WebController {
 
     //퀴즈 관련 음식들 보내기
     @GetMapping("/quizs")
-    public List<Food> sendQuiz() {
-        /**
-         * TODO 100개 정도로 보내면 될려나..
-         */
-        return foodService.findAll();
+    public HashMap<String,Object> sendQuiz(HttpServletRequest request) {
+        HashMap<String, Object> data = new HashMap<>();
+
+        Optional<Food> food = foodService.randomFood();
+
+        Food food1 = food.get();
+        FoodQuiz quiz = foodService.MakeQuiz(food1);
+
+        data.put("quiz", quiz);
+
+        HttpSession session = request.getSession();
+        Player player = (Player) session.getAttribute("player");
+        data.put("player", player);
+        log.info("Get Quiz");
+        return data;
     }
 
 
     @PostMapping("/players/outcome")
-    public void QuizEnd(@RequestBody PlayerOutcome outcome, HttpServletRequest request) {
+    public HashMap<String,Integer> QuizEnd(@RequestBody PlayerOutcome outcome, HttpServletRequest request) {
 
-        log.info("score = {}", outcome.getScore());
         HttpSession session = request.getSession(false);
         String nickName = (String) session.getAttribute("nickName");
-        Player player = new Player(nickName, 0);
-        log.info("save player = {}",player.getNickName());
-        playerService.save(player,outcome);
+        Player player = (Player) session.getAttribute("player");
+
+        log.info("answer ={} , Id = {}",outcome.getAnswer(),outcome.getQuizId());
+
+        HashMap<String, Integer> data = playerService.update(player, outcome);
+
+        log.info("player score = {}, turn = {}", player.getScore(),player.getTurn());
+
+        if(player.getTurn()==10) {
+            log.info("save player = {}", player.getNickName());
+            playerService.save(player);
+        }else
+            session.setAttribute("player",player);
+
+
+        return data;
     }
 
     @GetMapping("/dashboard/player")

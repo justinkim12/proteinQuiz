@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class MemoryFoodRepository implements foodRepository {
+public class MemoryFoodRepository implements FoodRepository {
     private static final Map<Long, Food> store = new HashMap<>(); //static
     private static Long id = 0L;
 

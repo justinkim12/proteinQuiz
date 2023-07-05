@@ -12,9 +12,9 @@ class MemoryPlayerRepositoryTest {
     private MemoryPlayerRepository memoryPlayerRepository= new MemoryPlayerRepository();
     @Test
     void save() {
-        Player player1 = new Player("a@a.com", 0);
-        Player player2 = new Player("b@a.com", 0);
-        Player player3 = new Player("c@a.com", 0);
+        Player player1 = new Player("a@a.com", 0,1,new ArrayList<>());
+        Player player2 = new Player("b@a.com", 0,1,new ArrayList<>());
+        Player player3 = new Player("c@a.com", 0, 1, new ArrayList<>());
 
         memoryPlayerRepository.save(player1);
         memoryPlayerRepository.save(player2);

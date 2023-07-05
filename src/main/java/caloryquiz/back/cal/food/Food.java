@@ -7,10 +7,16 @@ import lombok.Setter;
 @Getter@Setter
 @RequiredArgsConstructor
 public class Food {
-    private Long key;
+    Long key;
     private String name; //제품 명
     private String file_path; //파일 경로
     private Integer protein; // 칼로리 (답)
+
+    public Food( String name,String file_path) {
+
+        this.name = name;
+        this.file_path = file_path;
+    }
 
     public Food( String name,String file_path, Integer protein) {
 
@@ -18,4 +24,5 @@ public class Food {
         this.file_path = file_path;
         this.protein = protein;
     }
+
 }
