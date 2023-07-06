@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemoryPlayerRepositoryTest {
+class MemoryPlayerRepositoryTestCheck {
     private MemoryPlayerRepository memoryPlayerRepository= new MemoryPlayerRepository();
     @Test
     void save() {

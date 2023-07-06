@@ -53,9 +53,9 @@ public class PlayerService {
 
         HashMap<String, Integer> map = new HashMap<>();
 
-        map.put("answer",answer);
-        map.put("score", score);
-        return map; //이번 라운드 얻은 점수
+        map.put("answer",answer);//음식의 정답
+        map.put("score", score);//이번 라운드 얻은 점수
+        return map;
     }
 
     private static Integer scoreLogic(Integer answer, Integer user_answer) {

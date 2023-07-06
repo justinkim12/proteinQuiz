@@ -6,16 +6,18 @@ import caloryquiz.back.cal.food.FoodService;
 import caloryquiz.back.cal.player.Player;
 import caloryquiz.back.cal.player.PlayerOutcome;
 import caloryquiz.back.cal.player.PlayerService;
-import lombok.Getter;
+import caloryquiz.back.cal.web.ArgumentResolver.PlayerArgumentResolver.PlayerCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class WebController {
          * TODO nickName primary 검사
          */
         session.setAttribute("nickName", nickName);
-        Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
+        caloryquiz.back.cal.player.Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
         session.setAttribute("player",player);
         log.info("nickName = {}",session.getAttribute("nickName"));
 
@@ -50,7 +52,7 @@ public class WebController {
 
     //순위 정보 요청
         @GetMapping("/dashboard")
-    public List<Player> dashboard() {
+    public List<caloryquiz.back.cal.player.Player> dashboard() {
 
         /**
          * TODO playerRepository에서 상위 몇명 순위로 가져오기
@@ -63,7 +65,7 @@ public class WebController {
 
     //퀴즈 관련 음식들 보내기
     @GetMapping("/quizs")
-    public HashMap<String,Object> sendQuiz(HttpServletRequest request) {
+    public HashMap<String,Object> sendQuiz(@PlayerCheck Player player) {
         HashMap<String, Object> data = new HashMap<>();
 
         Optional<Food> food = foodService.randomFood();
@@ -73,8 +75,7 @@ public class WebController {
 
         data.put("quiz", quiz);
 
-        HttpSession session = request.getSession();
-        Player player = (Player) session.getAttribute("player");
+        //session 생성
         data.put("player", player);
         log.info("Get Quiz");
         return data;
@@ -82,11 +83,7 @@ public class WebController {
 
 
     @PostMapping("/players/outcome")
-    public HashMap<String,Integer> QuizEnd(@RequestBody PlayerOutcome outcome, HttpServletRequest request) {
-
-        HttpSession session = request.getSession(false);
-        String nickName = (String) session.getAttribute("nickName");
-        Player player = (Player) session.getAttribute("player");
+    public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @RequestBody PlayerOutcome outcome, HttpSession session) {
 
         log.info("answer ={} , Id = {}",outcome.getAnswer(),outcome.getQuizId());
 
@@ -105,12 +102,8 @@ public class WebController {
     }
 
     @GetMapping("/dashboard/player")
-    public HashMap<String, Object> getData(HttpServletRequest request){
+    public HashMap<String, Object> getData(@PlayerCheck Player player){
         HashMap<String, Object> data = new HashMap<>();
-        //player 정보
-        HttpSession session = request.getSession(false);
-        String nickName = (String) session.getAttribute("nickName");
-        Player player = playerService.findByNickName(nickName);
         log.info("Get player&DashBoard = {}", player.getNickName());
 
         /**
@@ -140,5 +133,10 @@ public class WebController {
         foodService.save(food1);
         foodService.save(food2);
         foodService.save(food3);
+
+
+        Player testPlayer = new Player("Test", 0, 10, new ArrayList<>());
+        playerService.save(testPlayer);
+
     }
 }
