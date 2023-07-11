@@ -1,5 +1,6 @@
 package caloryquiz.back.cal.web.ArgumentResolver.PlayerArgumentResolver;
 
+import caloryquiz.back.cal.Domain.player.Player;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -16,7 +17,7 @@ public class PlayerCheckArgumentResolver implements HandlerMethodArgumentResolve
     public boolean supportsParameter(MethodParameter parameter) {
       log.info("Support Parameter 실행");
         boolean hasParameterAnnotation = parameter.hasParameterAnnotation(PlayerCheck.class);
-        boolean hasPlayerType = caloryquiz.back.cal.player.Player.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasPlayerType = Player.class.isAssignableFrom(parameter.getParameterType());
 
         return hasParameterAnnotation&&hasPlayerType;
     }

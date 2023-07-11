@@ -1,5 +1,6 @@
-package caloryquiz.back.cal.food;
+package caloryquiz.back.cal.Domain.food;
 
+import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

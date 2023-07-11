@@ -1,4 +1,4 @@
-package caloryquiz.back.cal.food;
+package caloryquiz.back.cal.Domain.food;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

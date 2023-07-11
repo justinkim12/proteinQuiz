@@ -1,5 +1,7 @@
-package caloryquiz.back.cal.food;
+package caloryquiz.back.cal.Domain.food.Repository;
 
+import caloryquiz.back.cal.Domain.food.Food;
+import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

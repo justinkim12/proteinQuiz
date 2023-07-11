@@ -1,11 +1,13 @@
-package caloryquiz.back.cal.player;
+package caloryquiz.back.cal.Domain.player;
 
-import caloryquiz.back.cal.food.FoodRepository;
+import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
+import caloryquiz.back.cal.Domain.player.Repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,16 +20,12 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
-    public Player save(Player player,PlayerOutcome outcome){
+    public Player save(Player player,sendAnswer outcome){
 
         return playerRepository.save(player);
     }
 
-    public Player done(Player player, Integer score) {
-        return playerRepository.done(player, score);
-    }
-
-    public ArrayList<Player> findAll() {
+    public List<PlayerOutcome> findAll() {
         return playerRepository.findAll();
     }
 
@@ -39,7 +37,7 @@ public class PlayerService {
         return playerRepository.findByNickName(nickName);
     }
 
-    public HashMap<String, Integer> update(Player player, PlayerOutcome outcome) {
+    public HashMap<String, Integer> update(Player player, sendAnswer outcome) {
 
         Integer answer = foodRepository.findFoodByKey(outcome.getQuizId()).get().getProtein();
         Integer user_answer = outcome.getAnswer();

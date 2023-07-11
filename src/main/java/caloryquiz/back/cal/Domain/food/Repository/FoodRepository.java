@@ -1,4 +1,6 @@
-package caloryquiz.back.cal.food;
+package caloryquiz.back.cal.Domain.food.Repository;
+
+import caloryquiz.back.cal.Domain.food.Food;
 
 import java.util.ArrayList;
 import java.util.Optional;

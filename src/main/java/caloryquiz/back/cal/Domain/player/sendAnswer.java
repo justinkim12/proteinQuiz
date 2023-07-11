@@ -1,4 +1,4 @@
-package caloryquiz.back.cal.player;
+package caloryquiz.back.cal.Domain.player;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -10,8 +10,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class
-PlayerOutcome {
+public class sendAnswer {
 
     private Integer answer;
     private Long quizId;

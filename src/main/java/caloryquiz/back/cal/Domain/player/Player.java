@@ -1,4 +1,4 @@
-package caloryquiz.back.cal.player;
+package caloryquiz.back.cal.Domain.player;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

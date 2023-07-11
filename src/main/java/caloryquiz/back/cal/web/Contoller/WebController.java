@@ -1,11 +1,12 @@
 package caloryquiz.back.cal.web.Contoller;
 
-import caloryquiz.back.cal.food.Food;
-import caloryquiz.back.cal.food.FoodQuiz;
-import caloryquiz.back.cal.food.FoodService;
-import caloryquiz.back.cal.player.Player;
-import caloryquiz.back.cal.player.PlayerOutcome;
-import caloryquiz.back.cal.player.PlayerService;
+import caloryquiz.back.cal.Domain.food.Food;
+import caloryquiz.back.cal.Domain.food.FoodQuiz;
+import caloryquiz.back.cal.Domain.food.FoodService;
+import caloryquiz.back.cal.Domain.player.Player;
+import caloryquiz.back.cal.Domain.player.PlayerOutcome;
+import caloryquiz.back.cal.Domain.player.sendAnswer;
+import caloryquiz.back.cal.Domain.player.PlayerService;
 import caloryquiz.back.cal.web.ArgumentResolver.PlayerArgumentResolver.PlayerCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class WebController {
          * TODO nickName primary 검사
          */
         session.setAttribute("nickName", nickName);
-        caloryquiz.back.cal.player.Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
+        Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
         session.setAttribute("player",player);
         log.info("nickName = {}",session.getAttribute("nickName"));
 
@@ -52,7 +53,7 @@ public class WebController {
 
     //순위 정보 요청
         @GetMapping("/dashboard")
-    public List<caloryquiz.back.cal.player.Player> dashboard() {
+    public List<PlayerOutcome> dashboard() {
 
         /**
          * TODO playerRepository에서 상위 몇명 순위로 가져오기
@@ -83,7 +84,7 @@ public class WebController {
 
 
     @PostMapping("/players/outcome")
-    public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @RequestBody PlayerOutcome outcome, HttpSession session) {
+    public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @RequestBody sendAnswer outcome, HttpSession session) {
 
         log.info("answer ={} , Id = {}",outcome.getAnswer(),outcome.getQuizId());
 
@@ -107,7 +108,9 @@ public class WebController {
         log.info("Get player&DashBoard = {}", player.getNickName());
 
         /**
-         *TODO 순위를 추가하기
+         *TODO
+         * 저장했으면
+         * 순위를 추가하기
          * 세션 해제?
          */
         data.put("player", player);
@@ -117,26 +120,10 @@ public class WebController {
          * DashBoard와 같게 짜기
          * 메서드 따로 파기
          */
-        ArrayList<Player> players = playerService.findAll();
+        List<PlayerOutcome> players = playerService.findAll();
         data.put("dashBoard", players);
 
         return data;
     }
 
-    @PostConstruct
-    public void dataSetting() {
-
-        Food food1 = new Food("새우깡 90g", "/photo/새우깡.jpg", 6);
-        Food food2 = new Food("감동란 2알", "/photo/감동란.jpg", 12);
-        Food food3 = new Food("코카콜라 355ml(뚱캔)", "/photo/코카콜라.jpg", 2);
-
-        foodService.save(food1);
-        foodService.save(food2);
-        foodService.save(food3);
-
-
-        Player testPlayer = new Player("Test", 0, 10, new ArrayList<>());
-        playerService.save(testPlayer);
-
-    }
 }
