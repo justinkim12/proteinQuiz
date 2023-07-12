@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,7 +14,8 @@ public class FoodService {
     private final FoodRepository foodRepository;
 
     public FoodQuiz MakeQuiz(Food food){
-        return new FoodQuiz(food.getName(), food.getFile_path(), food.getKey());
+
+        return new FoodQuiz(food.getName(), food.getFile_path(), food.getFoodKey());
     }
 
 
@@ -21,17 +23,20 @@ public class FoodService {
         return foodRepository.save(food);
     }
 
-    public ArrayList<Food> findAll() {
+    public List<Food> findAll() {
         return foodRepository.findAll();
     }
 
-    public Optional<Food> randomFood() {
-        return foodRepository.randomFood();
+    public Food randomFood(ArrayList<Long> foodList) {
+        return foodRepository.randomFood(foodList);
     }
 
-    public Optional<Food> findFoodByKey(Long key) {
+    public Food findFoodByKey(Long key) {
         return foodRepository.findFoodByKey(key);
     }
 
 
+    public void delete(String name) {
+        foodRepository.delete(name);
+    }
 }

@@ -1,7 +1,6 @@
 package caloryquiz.back.cal.Domain.food.Repository;
 
 import caloryquiz.back.cal.Domain.food.Food;
-import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -13,27 +12,38 @@ public class MemoryFoodRepository implements FoodRepository {
 
     @Override
     public Food save(Food food) {
-        food.setKey(id++);
-        store.put(food.getKey(), food);
+        food.setFoodKey(id++);
+        store.put(food.getFoodKey(), food);
         return food;
     }
 
     @Override
-    public ArrayList<Food> findAll() {
+    public List<Food> findAll() {
         return new ArrayList<>(store.values());
     }
 
     @Override
-    public Optional<Food> randomFood() {
+    public void delete(String name) {
+
+    }
+
+    @Override
+    public void initKey() {
+
+    }
+
+    @Override
+    public Food randomFood(ArrayList<Long> foodList) {
         Random rand = new Random();
         Long key =(long) (rand.nextInt(Math.toIntExact(id)));
         return findFoodByKey(key);
     }
 
     @Override
-    public Optional<Food> findFoodByKey(Long key) {
-        return findAll().stream().filter(m -> m.getKey().equals(key)).findFirst();
+    public Food findFoodByKey(Long key) {
+        return findAll().stream().filter(m -> m.getFoodKey().equals(key)).findFirst().get();
     }
+
 
 
 }

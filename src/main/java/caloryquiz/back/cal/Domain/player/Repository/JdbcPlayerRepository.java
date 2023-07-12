@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@Repository
+@Repository
 public class JdbcPlayerRepository implements PlayerRepository{
 
     private final JdbcTemplate template;
@@ -30,14 +30,14 @@ public class JdbcPlayerRepository implements PlayerRepository{
 
     @Override
     public List<PlayerOutcome> findAll() {
-        String sql = "select * from player order by score";
+        String sql = "select * from player order by score desc";
         return template.query(sql,playerOutcomeRowMapperMapper);
     }
 
     @Override
-    public Optional<Player> findPlayerByKey(Long key) {
+    public Player findPlayerByKey(Long key) {
         String sql = "select * from player where playerKey = ?";
-        return Optional.ofNullable(template.queryForObject(sql,playerMapper,key));
+        return template.queryForObject(sql,playerMapper,key);
     }
 
     @Override

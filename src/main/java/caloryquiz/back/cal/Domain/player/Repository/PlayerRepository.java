@@ -13,7 +13,7 @@ public interface PlayerRepository {
 
     List<PlayerOutcome> findAll();
 
-    Optional<Player> findPlayerByKey(Long key);
+    Player findPlayerByKey(Long key);
 
     Player findByNickName(String nickName);
 

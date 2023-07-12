@@ -3,15 +3,19 @@ package caloryquiz.back.cal.Domain.food.Repository;
 import caloryquiz.back.cal.Domain.food.Food;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 public interface FoodRepository {
 
     Food save(Food food);
 
-    Optional<Food> findFoodByKey(Long key);
+    Food findFoodByKey(Long key);
 
-    Optional<Food> randomFood();
-    ArrayList<Food> findAll();
+    Food randomFood(ArrayList<Long> foodList);
 
+    List<Food> findAll();
+
+    void delete(String foodName);
+
+    void initKey();
 }

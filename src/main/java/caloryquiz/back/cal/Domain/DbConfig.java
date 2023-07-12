@@ -1,5 +1,7 @@
 package caloryquiz.back.cal.Domain;
 
+import caloryquiz.back.cal.Domain.food.Repository.FoodRate.FoodRateRepository;
+import caloryquiz.back.cal.Domain.food.Repository.FoodRate.JdbcFoodRateRepository;
 import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
 import caloryquiz.back.cal.Domain.food.Repository.JdbcFoodRepository;
 import caloryquiz.back.cal.Domain.player.Repository.JdbcPlayerRepository;
@@ -10,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class DbConfig {
     private final DataSource dataSource;
@@ -21,4 +23,8 @@ public class DbConfig {
     @Bean
     public PlayerRepository playerRepository(){return new JdbcPlayerRepository(dataSource);}
 
+    @Bean
+    public FoodRateRepository foodRateRepository(){
+        return new JdbcFoodRateRepository(dataSource);
+    }
 }

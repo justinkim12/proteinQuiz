@@ -1,5 +1,7 @@
 package caloryquiz.back.cal.Domain.player;
 
+import caloryquiz.back.cal.Domain.food.Repository.FoodRate.FoodRateRepository;
+import caloryquiz.back.cal.Domain.food.Repository.FoodRate.Grade;
 import caloryquiz.back.cal.Domain.food.Repository.FoodRepository;
 import caloryquiz.back.cal.Domain.player.Repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +17,13 @@ import java.util.Optional;
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final FoodRepository foodRepository;
+    private final FoodRateRepository foodRateRepository;
 
     public Player save(Player player) {
         return playerRepository.save(player);
     }
 
     public Player save(Player player,sendAnswer outcome){
-
         return playerRepository.save(player);
     }
 
@@ -29,7 +31,7 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
-    public Optional<Player> findPlayerByKey(Long key) {
+    public Player findPlayerByKey(Long key) {
         return playerRepository.findPlayerByKey(key);
     }
 
@@ -39,26 +41,33 @@ public class PlayerService {
 
     public HashMap<String, Integer> update(Player player, sendAnswer outcome) {
 
-        Integer answer = foodRepository.findFoodByKey(outcome.getQuizId()).get().getProtein();
+        Long foodID = outcome.getQuizId();
+        Integer answer = foodRepository.findFoodByKey(foodID).getProtein();
         Integer user_answer = outcome.getAnswer();
-        Integer score = scoreLogic(answer, user_answer);
+        Grade grade = scoreLogic(answer, user_answer); //등급 생성
+
+        //정답율 저장
+        foodRateRepository.save(foodID, grade);
+
+        //플레이어 점수, 턴, foodList 업데이트
+        Integer score = grade.getScore();
         player.setScore(player.getScore()+score); //점수 추가
         player.setTurn(player.getTurn()+1); //다음 턴
 
         ArrayList<Long> foodList = player.getFoodList();
-        foodList.add(outcome.getQuizId());
+        foodList.add(foodID);
         player.setFoodList(foodList);
 
+        //반환할 json map 생성
         HashMap<String, Integer> map = new HashMap<>();
-
         map.put("answer",answer);//음식의 정답
         map.put("score", score);//이번 라운드 얻은 점수
         return map;
     }
 
-    private static Integer scoreLogic(Integer answer, Integer user_answer) {
+    private static Grade scoreLogic(Integer answer, Integer user_answer) {
         //점수
-        Integer score =0;
+        Grade grade = Grade.F;
         // 절대값 오차 계산
         int absoluteError = Math.abs(answer - user_answer);
 
@@ -66,15 +75,15 @@ public class PlayerService {
         double errorPercentage = (double) absoluteError / answer * 100;
 
         if (user_answer == answer) {
-            score = 10; // 정답일 경우 10점
+            grade = Grade.A; // 정답일 경우 10점
         } else if (errorPercentage <= 10) {
-            score = 8; // 오차범위 10% 이내일 경우 6점
+            grade = Grade.B; // 오차범위 10% 이내일 경우 8점
         } else if (errorPercentage <= 20) {
-            score = 5; // 오차범위 20% 이내일 경우 3점
+            grade = Grade.C; // 오차범위 20% 이내일 경우 5점
         } else if (errorPercentage<=50){
-            score = 1; // 오차범위 50% 이내일 경우 1점
+            grade = Grade.D; // 오차범위 50% 이내일 경우 1점
         }
-        return score;
+        return grade;
     }
 
 }

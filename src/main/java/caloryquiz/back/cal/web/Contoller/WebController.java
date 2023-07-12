@@ -31,7 +31,7 @@ public class WebController {
 
     //start page
     @GetMapping
-    public String connectionChech(){
+    public String connectionCheck(){
         return "Hello World";
     }
 
@@ -52,7 +52,7 @@ public class WebController {
     }
 
     //순위 정보 요청
-        @GetMapping("/dashboard")
+    @GetMapping("/dashboard")
     public List<PlayerOutcome> dashboard() {
 
         /**
@@ -69,9 +69,8 @@ public class WebController {
     public HashMap<String,Object> sendQuiz(@PlayerCheck Player player) {
         HashMap<String, Object> data = new HashMap<>();
 
-        Optional<Food> food = foodService.randomFood();
 
-        Food food1 = food.get();
+        Food food1 = foodService.randomFood(player.getFoodList());
         FoodQuiz quiz = foodService.MakeQuiz(food1);
 
         data.put("quiz", quiz);
@@ -92,6 +91,8 @@ public class WebController {
 
         log.info("player score = {}, turn = {}", player.getScore(),player.getTurn());
 
+
+
         if(player.getTurn()==10) {
             log.info("save player = {}", player.getNickName());
             playerService.save(player);
@@ -103,7 +104,7 @@ public class WebController {
     }
 
     @GetMapping("/dashboard/player")
-    public HashMap<String, Object> getData(@PlayerCheck Player player){
+    public HashMap<String, Object> getData(@PlayerCheck Player player,HttpServletRequest request){
         HashMap<String, Object> data = new HashMap<>();
         log.info("Get player&DashBoard = {}", player.getNickName());
 
@@ -111,8 +112,10 @@ public class WebController {
          *TODO
          * 저장했으면
          * 순위를 추가하기
-         * 세션 해제?
          */
+
+        //세션 해제
+        request.getSession(false).invalidate();
         data.put("player", player);
 
         //dashboard 정보

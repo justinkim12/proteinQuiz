@@ -7,12 +7,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class FoodQuiz extends Food{
-    FoodQuiz(String name, String file_path){
-        super(name, file_path);
-    }
+public class FoodQuiz{
+
+    private String name;
+    private String file_path;
+    private Long key;
+
     FoodQuiz(String name, String file_path, Long key) {
-        super(name, file_path);
-        this.setKey(key);
+        this.name=name;
+        this.file_path = file_path;
+        this.key=key;
     }
 }

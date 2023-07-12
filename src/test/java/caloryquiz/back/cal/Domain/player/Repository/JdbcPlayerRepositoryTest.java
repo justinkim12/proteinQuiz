@@ -50,7 +50,7 @@ class JdbcPlayerRepositoryTest {
         playerRepository.save(player2);
         playerRepository.save(player3);
 
-        assertThat(playerRepository.findPlayerByKey(1L).get().getNickName()).isEqualTo("a@a.com");
+        assertThat(playerRepository.findPlayerByKey(1L).getNickName()).isEqualTo("a@a.com");
 
     }
 }
