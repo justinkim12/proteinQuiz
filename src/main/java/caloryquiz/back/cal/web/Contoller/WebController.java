@@ -1,17 +1,22 @@
 package caloryquiz.back.cal.web.Contoller;
 
+import caloryquiz.back.cal.Domain.Error.ErrorResult;
 import caloryquiz.back.cal.Domain.food.Food;
 import caloryquiz.back.cal.Domain.food.FoodQuiz;
 import caloryquiz.back.cal.Domain.food.FoodService;
 import caloryquiz.back.cal.Domain.player.*;
 import caloryquiz.back.cal.web.ArgumentResolver.PlayerArgumentResolver.PlayerCheck;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,28 +40,45 @@ public class WebController {
 
     //첫 페이지에서 닉네임을 넘기면 세션을 넘기고 게임 시작
     @PostMapping("/players")
-    public void getSession(HttpServletRequest request, @RequestBody String nickName) {
+    public ErrorResult getSession(HttpServletRequest request, @Validated @RequestBody PlayerNickName nickName, BindingResult bindingResult) {
+        ErrorResult errorResult = new ErrorResult("ok");
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            log.info("Binding Error message = {}", errorMessage);
+            errorResult.setMessage(errorMessage);
+            return errorResult;
+        }
+        String check = nickName.basicCheck();
+        if(check.length()>0){
+           errorResult.setMessage(check);
+           log.info("닉네임 에러 = {}",check);
+            return errorResult;
+        }
+
+
+        String getNickName = nickName.getNickName();
+
+        if(playerService.CheckUniqueNickName(getNickName)) { //중복 방지
+            log.info("닉네임 에러 = 중복");
+            errorResult.setMessage("이미 있는 닉네임입니다.");
+            return errorResult;
+        }
         //세션 생성
         HttpSession session = request.getSession();
         /**
          * TODO nickName primary 검사
          */
         session.setAttribute("nickName", nickName);
-        Player player = new Player(nickName, 0, 1, new ArrayList<Long>());
+        Player player = new Player(getNickName, 0, 1, new ArrayList<Long>());
         session.setAttribute("player",player);
-        log.info("nickName = {}",session.getAttribute("nickName"));
-
+        log.info("start player = {}",session.getAttribute("nickName"));
+        return errorResult;
     }
 
     //순위 정보 요청
     @GetMapping("/dashboard")
     public List<PlayerOutcome> dashboard() {
-
-        /**
-         * TODO playerRepository에서 상위 몇명 순위로 가져오기
-         */
-
-        return playerService.findAll();
+        return playerService.findAll(10);
     }
 
     //문제 페이지
@@ -72,21 +94,26 @@ public class WebController {
 
         data.put("quiz", quiz);
 
-        //session 생성
         data.put("player", player);
-        log.info("Get Quiz");
+//        log.info("Get Quiz");
         return data;
     }
 
 
     @PostMapping("/players/outcome")
-    public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @RequestBody sendAnswer outcome, HttpSession session) {
+    public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @Validated @RequestBody sendAnswer outcome,
+                                           BindingResult bindingResult, HttpSession session) {
 
-        log.info("answer ={} , Id = {}",outcome.getAnswer(),outcome.getQuizId());
+        if(bindingResult.hasErrors()){
+            log.info("Binding Error = {} ",bindingResult.getAllErrors().get(0).getDefaultMessage());
+//            log.info("outcome = {} {}",outcome.getAnswer(),outcome.getQuizId());
+            outcome.setAnswer(0);
+        }
 
         HashMap<String, Integer> data = playerService.update(player, outcome);
 
-        log.info("player score = {}, turn = {}", player.getScore(),player.getTurn());
+        log.info("player answer ={} , Id = {}, player score = {}, turn = {}" ,
+                outcome.getAnswer(),outcome.getQuizId(),player.getScore(),player.getTurn());
 
 
 
@@ -105,10 +132,6 @@ public class WebController {
         HashMap<String, Object> data = new HashMap<>();
         log.info("Get player&DashBoard = {}", player.getNickName());
 
-        /**
-         *TODO
-         * 저장했으면
-         */
 
         //순위정보
         PlayerRank playerRank = playerService.getRank(player);
@@ -118,11 +141,7 @@ public class WebController {
         data.put("player", playerRank);
 
         //dashboard 정보
-        /**
-         * DashBoard와 같게 짜기
-         * 메서드 따로 파기
-         */
-        List<PlayerOutcome> players = playerService.findAll();
+        List<PlayerOutcome> players = playerService.findAll(10);
         data.put("dashBoard", players);
 
         return data;

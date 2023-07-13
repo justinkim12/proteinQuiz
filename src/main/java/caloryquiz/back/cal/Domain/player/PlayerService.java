@@ -31,12 +31,23 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    public List<PlayerOutcome> findAll(Integer max_index) {
+        return playerRepository.findAll(max_index);
+    }
+
+
     public Player findPlayerByKey(Long key) {
         return playerRepository.findPlayerByKey(key);
     }
 
     public Player findByNickName(String nickName) {
         return playerRepository.findByNickName(nickName);
+    }
+
+    public boolean CheckUniqueNickName(String nickName){
+        if (playerRepository.findByNickName(nickName)!=null)
+            return true;
+        return false;
     }
 
     public PlayerRank getRank(Player player) {

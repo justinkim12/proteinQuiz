@@ -4,6 +4,7 @@ import caloryquiz.back.cal.Domain.food.Food;
 import caloryquiz.back.cal.Domain.player.Player;
 import caloryquiz.back.cal.Domain.player.PlayerOutcome;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -50,6 +51,12 @@ public class JdbcPlayerRepository implements PlayerRepository{
     }
 
     @Override
+    public List<PlayerOutcome> findAll(Integer max_integer) {
+        String sql = "select * from player order by score desc limit ?";
+        return template.query(sql,playerOutcomeRowMapperMapper, max_integer);
+    }
+
+    @Override
     public Player findPlayerByKey(Long key) {
         String sql = "select * from player where playerKey = ?";
         return template.queryForObject(sql,playerMapper,key);
@@ -58,7 +65,11 @@ public class JdbcPlayerRepository implements PlayerRepository{
     @Override
     public Player findByNickName(String nickName) {
         String sql = "select * from player where nickname = ?";
-        return (template.queryForObject(sql, Player.class, nickName));
+        try {
+            return (template.queryForObject(sql, playerMapper, nickName));
+        }catch (IncorrectResultSizeDataAccessException e){
+            return null;
+        }
     }
 
     @Override
