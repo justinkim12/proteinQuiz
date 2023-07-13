@@ -13,4 +13,5 @@ public class PlayerOutcome {
         this.nickName = nickName;
         this.score = score;
     }
+
 }

@@ -3,10 +3,7 @@ package caloryquiz.back.cal.web.Contoller;
 import caloryquiz.back.cal.Domain.food.Food;
 import caloryquiz.back.cal.Domain.food.FoodQuiz;
 import caloryquiz.back.cal.Domain.food.FoodService;
-import caloryquiz.back.cal.Domain.player.Player;
-import caloryquiz.back.cal.Domain.player.PlayerOutcome;
-import caloryquiz.back.cal.Domain.player.sendAnswer;
-import caloryquiz.back.cal.Domain.player.PlayerService;
+import caloryquiz.back.cal.Domain.player.*;
 import caloryquiz.back.cal.web.ArgumentResolver.PlayerArgumentResolver.PlayerCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,12 +108,14 @@ public class WebController {
         /**
          *TODO
          * 저장했으면
-         * 순위를 추가하기
          */
 
+        //순위정보
+        PlayerRank playerRank = playerService.getRank(player);
+        log.info("player id = {}, nickName = {}, rank = {} ",player.getKey(),player.getNickName(),playerRank.getRank());
         //세션 해제
         request.getSession(false).invalidate();
-        data.put("player", player);
+        data.put("player", playerRank);
 
         //dashboard 정보
         /**

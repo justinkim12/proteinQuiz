@@ -3,11 +3,15 @@ package caloryquiz.back.cal.Domain.player.Repository;
 import caloryquiz.back.cal.Domain.food.Food;
 import caloryquiz.back.cal.Domain.player.Player;
 import caloryquiz.back.cal.Domain.player.PlayerOutcome;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +27,19 @@ public class JdbcPlayerRepository implements PlayerRepository{
 
     @Override
     public Player save(Player player) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         String sql ="insert into player(nickname,score) values(?,?)";
-        template.update(sql, player.getNickName(), player.getScore());
+//        template.update(sql, player.getNickName(), player.getScore());
+        template.update(conn -> {
+            PreparedStatement pstmt = conn.prepareStatement(
+                    sql, new String[]{"playerKey"});
+            pstmt.setString(1, player.getNickName());
+            pstmt.setInt(2, player.getScore());
+            return pstmt;
+        }, keyHolder);
+
+        player.setKey(keyHolder.getKey().longValue());
         return player;
     }
 
@@ -64,6 +79,14 @@ public class JdbcPlayerRepository implements PlayerRepository{
     public void initKey(){
        String sql = "ALTER TABLE PLAYER  ALTER COLUMN playerKey RESTART WITH 1;";
        template.execute(sql);
+    }
+
+    @Override
+    public Integer getRank(Long key) {
+        String sql = "Select rank from (SELECT playerKey, RANK() OVER (ORDER BY score DESC) rank\n" +
+                "FROM player) where playerKey = ?";
+        return (template.queryForObject(sql, Integer.class, key));
+
     }
 
 }

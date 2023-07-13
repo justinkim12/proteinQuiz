@@ -19,5 +19,9 @@ public interface PlayerRepository {
 
     void delete(String nickName);
 
+
+
     void initKey();
+
+    Integer getRank(Long key);
 }

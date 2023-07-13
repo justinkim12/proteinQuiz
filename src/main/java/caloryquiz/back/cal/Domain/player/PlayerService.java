@@ -39,6 +39,12 @@ public class PlayerService {
         return playerRepository.findByNickName(nickName);
     }
 
+    public PlayerRank getRank(Player player) {
+        Integer rank = playerRepository.getRank(player.getKey());
+        return new PlayerRank(player.getNickName(), player.getScore(), rank);
+    }
+
+
     public HashMap<String, Integer> update(Player player, sendAnswer outcome) {
 
         Long foodID = outcome.getQuizId();
