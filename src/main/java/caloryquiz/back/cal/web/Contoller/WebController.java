@@ -54,8 +54,6 @@ public class WebController {
            log.info("닉네임 에러 = {}",check);
             return errorResult;
         }
-
-
         String getNickName = nickName.getNickName();
 
         if(playerService.CheckUniqueNickName(getNickName)) { //중복 방지
@@ -63,15 +61,13 @@ public class WebController {
             errorResult.setMessage("이미 있는 닉네임입니다.");
             return errorResult;
         }
+
         //세션 생성
         HttpSession session = request.getSession();
-        /**
-         * TODO nickName primary 검사
-         */
         session.setAttribute("nickName", nickName);
         Player player = new Player(getNickName, 0, 1, new ArrayList<Long>());
         session.setAttribute("player",player);
-        log.info("start player = {}",session.getAttribute("nickName"));
+        log.info("start player = {}",session.getAttribute("nickName").getClass());
         return errorResult;
     }
 
@@ -137,7 +133,7 @@ public class WebController {
         PlayerRank playerRank = playerService.getRank(player);
         log.info("player id = {}, nickName = {}, rank = {} ",player.getKey(),player.getNickName(),playerRank.getRank());
         //세션 해제
-        request.getSession(false).invalidate();
+//        request.getSession(false).invalidate();
         data.put("player", playerRank);
 
         //dashboard 정보
