@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("https://web-proteinquizfront-20zynm2mlk2a7j4g.sel4.cloudtype.app")
                 .allowedMethods("POST","GET","PUT","DELETE","HEAD","OPTIONS")
+                .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3000); // 원하는 시간만큼 pre-flight 리퀘스트를 캐싱
     }
