@@ -97,7 +97,7 @@ public class WebController {
     }
 
 
-    @PostMapping("/players/outcome")
+    @PostMapping("/outcome")
     public HashMap<String,Integer> QuizEnd(@PlayerCheck Player player, @Validated @RequestBody sendAnswer outcome,
                                            BindingResult bindingResult, HttpSession session) {
 
