@@ -26,7 +26,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") //React와 연동을 위해 잠시 추가
+
+//@CrossOrigin(origins = "https://protein-quiz.vercel.app") //React와 연동을 위해 잠시 추가
 public class WebController {
     private final PlayerService playerService;
     private final FoodService foodService;
