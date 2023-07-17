@@ -19,7 +19,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
         log.info("Method ={}", request.getMethod());
         log.info("Headers ={}",request.getHeader("Access-Control-Allow-Origin"));
-        if (request.getMethod().equals(HttpMethod.OPTIONS)) {
+        if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
             log.info("preflight");
             return true;
         }
