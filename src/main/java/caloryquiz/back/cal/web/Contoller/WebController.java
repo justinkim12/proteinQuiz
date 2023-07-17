@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("/api")
 
-@CrossOrigin(origins = "https://web-proteinquizfront-20zynm2mlk2a7j4g.sel4.cloudtype.app")
+//@CrossOrigin(origins = "https://web-proteinquizfront-20zynm2mlk2a7j4g.sel4.cloudtype.app")
 public class WebController {
     private final PlayerService playerService;
     private final FoodService foodService;
