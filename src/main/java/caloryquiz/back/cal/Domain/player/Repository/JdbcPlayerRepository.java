@@ -94,8 +94,12 @@ public class JdbcPlayerRepository implements PlayerRepository{
 
     @Override
     public Integer getRank(Long key) {
-        String sql = "Select rank from (SELECT playerKey, RANK() OVER (ORDER BY score DESC) rank\n" +
-                "FROM player) where playerKey = ?";
+        String sql = "SELECT rank\n" +
+                "FROM (\n" +
+                "  SELECT playerKey, RANK() OVER (ORDER BY score DESC) AS rank\n" +
+                "  FROM player\n" +
+                ") AS subquery\n" +
+                "WHERE playerKey = ?";
         return (template.queryForObject(sql, Integer.class, key));
 
     }
