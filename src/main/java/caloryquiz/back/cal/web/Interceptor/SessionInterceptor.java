@@ -17,6 +17,8 @@ public class SessionInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession(false);
 
+        log.info("Method ={}", request.getMethod());
+        log.info("Headers ={}",request.getHeader("Access-Control-Allow-Origin"));
         if (request.getMethod().equals(HttpMethod.OPTIONS)) {
             log.info("preflight");
             return true;
