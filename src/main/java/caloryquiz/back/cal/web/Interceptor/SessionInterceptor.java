@@ -2,6 +2,8 @@ package caloryquiz.back.cal.web.Interceptor;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,11 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession(false);
+
+        if (request.getMethod().equals(HttpMethod.OPTIONS)) {
+            log.info("preflight");
+            return true;
+        }
 
         if (session == null || session.getAttribute("player") == null) {
             log.info("미인증 사용자 요청");
