@@ -76,11 +76,11 @@ public class PlayerController {
         HashMap<String, Integer> data = playerService.update(player, outcome);
 
         log.info("[{}] answer ={} , QuizId = {}, player score = {}, turn = {}" , player.getNickName(),
-                outcome.getAnswer(),outcome.getQuizId(),player.getScore(),player.getTurn());
+                outcome.getAnswer(),outcome.getQuizId(),player.getScore(),player.getTurn()-1);//업데이트가 되었기 땜에 turn-1
 
 
         //턴에 따라 저장 또는 세션 수정
-        if(player.getTurn()==10) {
+        if(player.getTurn()>10) {
             log.info("[{}] save player", player.getNickName());
             playerService.save(player);
         }else
