@@ -17,7 +17,6 @@ public class SessionInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
 
         if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
-            log.info("preflight");
             return true;
         }
 

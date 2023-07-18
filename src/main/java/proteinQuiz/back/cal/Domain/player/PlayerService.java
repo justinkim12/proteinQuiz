@@ -90,14 +90,14 @@ public class PlayerService {
         // 오차 비율 계산
         double errorPercentage = (double) absoluteError / answer * 100;
 
-        if (user_answer == answer) {
-            grade = Grade.A; // 정답일 경우 10점
-        } else if (errorPercentage <= 10) {
-            grade = Grade.B; // 오차범위 10% 이내일 경우 8점
-        } else if (errorPercentage <= 20) {
-            grade = Grade.C; // 오차범위 20% 이내일 경우 5점
+        if (errorPercentage <= 5) {
+            grade = Grade.A; // 오차범위 5% 20점
+        } else if (errorPercentage <= 15) {
+            grade = Grade.B; // 오차범위 10% 이내일 경우 15점
+        } else if (errorPercentage <= 30) {
+            grade = Grade.C; // 오차범위 20% 이내일 경우 10점
         } else if (errorPercentage<=50){
-            grade = Grade.D; // 오차범위 50% 이내일 경우 1점
+            grade = Grade.D; // 오차범위 50% 이내일 경우 5점
         }
         return grade;
     }
