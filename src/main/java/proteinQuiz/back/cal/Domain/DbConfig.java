@@ -1,5 +1,8 @@
 package proteinQuiz.back.cal.Domain;
 
+import proteinQuiz.back.cal.Domain.Logging.JdbcLoggingRepository;
+import proteinQuiz.back.cal.Domain.Logging.LoggingRepository;
+import proteinQuiz.back.cal.Domain.Logging.LoggingService;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRate.FoodRateRepository;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRate.JdbcFoodRateRepository;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRepository;
@@ -27,4 +30,11 @@ public class DbConfig {
     public FoodRateRepository foodRateRepository(){
         return new JdbcFoodRateRepository(dataSource);
     }
+
+    @Bean
+    public LoggingService loggingService(){
+        return new LoggingService(loggingRepository());}
+
+    @Bean
+    public LoggingRepository loggingRepository(){return new JdbcLoggingRepository(dataSource);}
 }
