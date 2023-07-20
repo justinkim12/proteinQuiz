@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,9 +30,14 @@ public class JdbcLoggingRepository implements LoggingRepository {
     @Override
     public void save(String fileName) {//LoggingEntity loggingEntity 인자로 넣기
         //sql
-        String sql = "insert into log(log_level,time,logger_name,message) values(?,?,?,?)";
+        String sql = "insert into log(log_level,timestamp,logger_name,message) values(?,?,?,?)";
+
+        //Date
+        SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
+        String day = today.format(today);
         // 파일경로
-        String filePath = "./logs/"+fileName+".log";
+        String filePath = "./logs/"+"log-" + fileName+".0.log";
+
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath),
                     StandardCharsets.UTF_8);
@@ -42,7 +46,7 @@ public class JdbcLoggingRepository implements LoggingRepository {
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.find()) {
                     String logLevel = matcher.group(1);
-                    Time timestamp = Time.valueOf((matcher.group(2)));
+                    Timestamp timestamp = convertStringToTimestamp(day+" "+matcher.group(2));
                     String loggerName = matcher.group(3);
                     String message = matcher.group(4);
                     // 로그 정보 저장
@@ -54,6 +58,16 @@ public class JdbcLoggingRepository implements LoggingRepository {
         }
     }
 
+    private static Timestamp convertStringToTimestamp(String timeString){
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        java.util.Date parsedDate = null;
+        try {
+            parsedDate = timeFormat.parse(timeString);
+        } catch (ParseException e) {
+            log.error("error={}", e.getMessage(), e);
+        }
+        return new Timestamp(parsedDate.getTime());
+    }
     @Override
     public void drop() {
         String sql = "delete from log";
