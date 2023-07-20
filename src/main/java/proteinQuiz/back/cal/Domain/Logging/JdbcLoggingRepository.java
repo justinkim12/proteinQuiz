@@ -33,10 +33,8 @@ public class JdbcLoggingRepository implements LoggingRepository {
         String sql = "insert into log(log_level,timestamp,logger_name,message) values(?,?,?,?)";
 
         //Date
-        SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
-        String day = today.format(today);
         // 파일경로
-        String filePath = "./logs/"+"log-" + fileName+".0.log";
+        String filePath = "./logs/"+"log-" + fileName+".0.log"; //하드코딩 요소
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath),
@@ -46,7 +44,7 @@ public class JdbcLoggingRepository implements LoggingRepository {
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.find()) {
                     String logLevel = matcher.group(1);
-                    Timestamp timestamp = convertStringToTimestamp(day+" "+matcher.group(2));
+                    Timestamp timestamp = convertStringToTimestamp(fileName+" "+matcher.group(2));
                     String loggerName = matcher.group(3);
                     String message = matcher.group(4);
                     // 로그 정보 저장
