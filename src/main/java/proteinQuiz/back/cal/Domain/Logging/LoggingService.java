@@ -18,11 +18,11 @@ public class LoggingService {
         this.loggingRepository = loggingRepository;
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?") // 매 10분마다
+    @Scheduled(cron = "0 10 * * * ?") // 매시 10분마다
     public void saveLog() {
         Date d = new Date(); //오늘날짜
-        d = new Date(d.getTime()+(1000*60*-1)); //5분전꺼
-        SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+        d = new Date(d.getTime()+(1000*60*10*-1)); //10분전꺼
+        SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd-HH");
         String fileName = "log-" + today.format(d)+".0";//일단은 .0 한개만 만들어질 예정
         log.warn("Saving All logs {}", fileName);
         loggingRepository.save(fileName); // 로그를 DB에 저장

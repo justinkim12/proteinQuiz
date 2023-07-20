@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="30 seconds">
+<configuration scan="true" scanPeriod="30 minutes">
     <!--로그 파일 저장 위치-->
     <property name="LOGS_PATH" value="./logs/"/>>
     <!-- 지정한 일자/시간마다 파일을 생성하면서 로그를 찍는다-->
@@ -11,7 +11,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
             <!-- 일자까지 지정했기때문에 하루 단위 로그 파일이 생성된다.-->
-            <fileNamePattern>${LOGS_PATH}log-%d{yyyy-MM-dd-HH-mm}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOGS_PATH}log-%d{yyyy-MM-dd-HH}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
