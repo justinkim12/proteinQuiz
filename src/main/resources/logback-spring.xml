@@ -11,7 +11,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
             <!-- 일자까지 지정했기때문에 하루 단위 로그 파일이 생성된다.-->
-            <fileNamePattern>${LOGS_PATH}log-%d{yyyy-MM-dd-HH}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOGS_PATH}log-%d{yyyy-MM-dd-HH, ${logback.timezone:-Asia/Seoul}}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
@@ -23,7 +23,7 @@
 
         <encoder>
             <!-- 찍어줄 로그의 형태, 시간과 로그가 찍힌 메소드, 메세지가 출력된다.-->
-            <pattern>[%-5level] %d{HH:mm:ss.SSS} %logger{36} %M - %msg%n</pattern>
+            <pattern>[%-5level] %d{HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} %logger{36} %M - %msg%n</pattern>
         </encoder>
 
     </appender>
@@ -34,7 +34,7 @@
             <level>WARN</level>  <!-- 로그 레벨 지정하는 부분-->
         </filter>
         <encoder>
-            <Pattern>%d %5p [%c] %m%n</Pattern>
+            <pattern>[%-5level] %d{HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} %logger{36} %M - %msg%n</pattern>
         </encoder>
     </appender>
 
