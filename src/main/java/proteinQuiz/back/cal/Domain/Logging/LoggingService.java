@@ -18,7 +18,7 @@ public class LoggingService {
         this.loggingRepository = loggingRepository;
     }
 
-    @Scheduled(cron = "0 5 12 * * ?") // 매일 12시 5분마다
+    @Scheduled(cron = "0 15 1 * * ?") // 매일 1시 15분마다
     public void saveLog() {
         Date d = new Date(); //오늘날짜
         d = new Date(d.getTime()+(1000*60*60*24*-1)); //전날 로그
