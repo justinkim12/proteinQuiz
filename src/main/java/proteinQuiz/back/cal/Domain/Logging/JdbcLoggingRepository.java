@@ -31,7 +31,7 @@ public class JdbcLoggingRepository implements LoggingRepository {
     @Override
     public void save(String fileName) {//LoggingEntity loggingEntity 인자로 넣기
         //sql
-        String sql = "insert into log(log_level,timestamp,logger_name,message) values(?,?,?,?)";
+        String sql = "insert into log(log_level,time,logger_name,message) values(?,?,?,?)";
         // 파일경로
         String filePath = "./logs/"+fileName+".log";
         try {
