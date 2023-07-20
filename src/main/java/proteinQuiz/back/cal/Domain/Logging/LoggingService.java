@@ -18,7 +18,7 @@ public class LoggingService {
         this.loggingRepository = loggingRepository;
     }
 
-    @Scheduled(cron = "0 15 0 ? * *")
+    @Scheduled(cron = "0 0 13 * * ?")
     public void saveLog() {
         Date d = new Date(); //오늘날짜
         d = new Date(d.getTime()+(1000*60*60*24*-1)); //어제날짜
