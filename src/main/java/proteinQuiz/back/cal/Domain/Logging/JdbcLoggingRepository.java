@@ -2,6 +2,7 @@ package proteinQuiz.back.cal.Domain.Logging;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@Repository
 @Slf4j
 public class JdbcLoggingRepository implements LoggingRepository {
 
