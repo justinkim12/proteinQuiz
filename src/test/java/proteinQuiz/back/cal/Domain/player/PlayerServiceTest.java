@@ -1,5 +1,6 @@
 package proteinQuiz.back.cal.Domain.player;
 
+import org.springframework.transaction.annotation.Transactional;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRate.FoodRateRepository;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRate.JdbcFoodRateRepository;
 import proteinQuiz.back.cal.Domain.food.Repository.FoodRepository;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Transactional
 @SpringBootTest
 class PlayerServiceTest {
 
@@ -30,39 +32,6 @@ class PlayerServiceTest {
 
     @Autowired
     private FoodRateRepository foodRateRepository;
-
-    @TestConfiguration
-    static class TestConfig{
-
-        private final DataSource dataSource;
-
-        public TestConfig(DataSource dataSource) {
-            this.dataSource = dataSource;
-        }
-        @Bean
-        PlayerRepository playerRepository(){
-            return new JdbcPlayerRepository(dataSource);
-        }
-
-        @Bean
-        FoodRepository foodRepository(){
-            return new JdbcFoodRepository(dataSource);
-        }
-
-        @Bean
-        FoodRateRepository foodRateRepository(){return new JdbcFoodRateRepository(dataSource);}
-        @Bean
-        PlayerService playerService(){
-            return new PlayerService(playerRepository(), foodRepository(),foodRateRepository());}
-    }
-
-    @AfterEach
-    void after() {
-        playerRepository.delete("a@a.com");
-        playerRepository.delete("b@a.com");
-        playerRepository.delete("c@a.com");
-        playerRepository.initKey();
-    }
 
     @Test
     void saveAndFindAll(){

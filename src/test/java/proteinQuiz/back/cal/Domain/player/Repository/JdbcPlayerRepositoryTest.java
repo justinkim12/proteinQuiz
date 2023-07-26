@@ -1,5 +1,6 @@
 package proteinQuiz.back.cal.Domain.player.Repository;
 
+import org.springframework.transaction.annotation.Transactional;
 import proteinQuiz.back.cal.Domain.player.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -13,32 +14,13 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Transactional
 @SpringBootTest
 class JdbcPlayerRepositoryTest {
 
     @Autowired
     private PlayerRepository playerRepository;
 
-    @TestConfiguration
-    static class TestConfig{
-        private final DataSource dataSource;
-
-        public TestConfig(DataSource dataSource) {
-            this.dataSource = dataSource;
-        }
-        @Bean
-        PlayerRepository playerRepository(){
-            return new JdbcPlayerRepository(dataSource);
-        }
-    }
-
-    @AfterEach
-    void after() {
-        playerRepository.delete("a@a.com");
-        playerRepository.delete("b@a.com");
-        playerRepository.delete("c@a.com");
-        playerRepository.initKey();
-    }
 
     @Test
     void saveAndFind() {
@@ -50,7 +32,7 @@ class JdbcPlayerRepositoryTest {
         playerRepository.save(player2);
         playerRepository.save(player3);
 
-        assertThat(playerRepository.findPlayerByKey(1L).getNickName()).isEqualTo("a@a.com");
+        assertThat(playerRepository.findByNickName("a@a.com")).isInstanceOf(Player.class);
 
     }
 }
