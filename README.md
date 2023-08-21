@@ -36,7 +36,7 @@ https://web-proteinquizfront-20zynm2mlk2a7j4g.sel4.cloudtype.app/
 
 # DB ERD
 
-![image](https://github.com/justinkim12/proteinQuiz/erd.png)
+![image](https://raw.githubusercontent.com/justinkim12/proteinQuiz/main/erd.png)
 
 
 - player : 유저들의 점수들을 저장하는 테이블
