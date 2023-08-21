@@ -1,6 +1,5 @@
 # proteinQuiz
 
-# ProteinQuiz
 
 # 프로잭트 소개
 
