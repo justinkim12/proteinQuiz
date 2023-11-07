@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new SessionInterceptor())
                 .order(1)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/","/api/players");
+                .excludePathPatterns("/api/","/api/players","/api/test/**");
 
     }
     @Override
