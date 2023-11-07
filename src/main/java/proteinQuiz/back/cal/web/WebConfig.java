@@ -31,6 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://web-proteinquizfront-20zynm2mlk2a7j4g.sel4.cloudtype.app")
+                .allowedOrigins("http://localhost:3000") //TODO 개발 종료 시 삭제
                 .allowedMethods("POST","GET","PUT","DELETE","HEAD","OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
