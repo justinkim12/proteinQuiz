@@ -38,3 +38,5 @@ out/
 
 #log
 *.log
+#properties
+*.properties
